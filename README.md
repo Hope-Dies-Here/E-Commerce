@@ -12,11 +12,9 @@ This project is an e-commerce platform designed to provide a seamless shopping e
 
 ## Tech Stack
 - **Backend**: Node.js, Express.js
-- **Frontend**: React.js (if applicable)
-- **Database**: MongoDB
+- **Frontend**: ወፍ
+- **Database**: Postgres
 - **Authentication**: JSON Web Tokens (JWT)
-- **Payment Gateway**: Stripe (or other integration)
-- **Version Control**: Git
 
 ## Installation
 1. Clone the repository:
