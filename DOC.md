@@ -45,10 +45,10 @@ e-commerce/
 
 3. Configure the `.env` file:
    ```properties
-   DB_USER=postgres
-   DB_HOST=localhost
-   DB_NAME=e_commerce
-   DB_PASSWORD=root
+   DB_USER=your_db_user
+   DB_HOST=your_host(localhost for local setup)
+   DB_NAME=your_db_name
+   DB_PASSWORD=your_db_password
    DB_PORT=5432
    JWT_SECRET_KEY=your_jwt_secret
    ADMIN_JWT_SECRET_KEY=your_admin_jwt_secret
