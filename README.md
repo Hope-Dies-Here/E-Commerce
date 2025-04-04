@@ -10,6 +10,14 @@ This project is an e-commerce platform designed to provide a seamless shopping e
 - Order management
 - Payment gateway integration
 
+## Tech Stack
+- **Backend**: Node.js, Express.js
+- **Frontend**: React.js (if applicable)
+- **Database**: MongoDB
+- **Authentication**: JSON Web Tokens (JWT)
+- **Payment Gateway**: Stripe (or other integration)
+- **Version Control**: Git
+
 ## Installation
 1. Clone the repository:
    ```bash
@@ -47,6 +55,9 @@ Contributions are welcome! Please follow these steps:
    git push origin feature-name
    ```
 5. Open a pull request.
+
+## Documentation
+For detailed documentation, refer to [DOC.md](DOC.md).
 
 ## License
 This project is licensed under the MIT License. See the `LICENSE` file for details.
