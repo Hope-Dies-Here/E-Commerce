@@ -1,6 +1,6 @@
 const { DataTypes } = require("sequelize");
 const { sequelize } = require("../config/db");
-const { v4: uuidv4 } = require('uuid'); 
+const { v4: uuidv4 } = require("uuid");
 
 const Customer = sequelize.define(
   "Customer",
@@ -31,7 +31,7 @@ const Customer = sequelize.define(
     balance: {
       type: DataTypes.FLOAT,
       defaultValue: 0.0,
-    }
+    },
   },
   {
     sequelize,
@@ -40,5 +40,4 @@ const Customer = sequelize.define(
   }
 );
 
-    module.exports = Customer;
-
+module.exports = Customer;

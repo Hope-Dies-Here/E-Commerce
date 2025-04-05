@@ -12,7 +12,6 @@ const {
   getProductsByName,
 } = require("../controllers/ProductControllers");
 const { isAdmin } = require("../middlewares/verifyUsers");
-// const verifyAdmin = require('../middlewares/verifyAdmin');
 
 router.get("/", getProducts);
 router.get("/search", getProductsByName);
@@ -22,6 +21,12 @@ router.patch("/set-price/:id", isAdmin, setPrice);
 router.post("/", isAdmin, createProduct);
 router.put("/:id", isAdmin, updateProduct);
 router.delete("/:id", isAdmin, deleteProduct);
+
+
+function smallLetter(params) {
+const name = "beyene"
+    return params.toLowerCase(); 
+}
 
 router.post("/sample", sampleProducts);
 

@@ -15,17 +15,18 @@ app.use("/customers", require("./routes/CustomerRoutes"));
 app.use("/products", require("./routes/ProductRoutes"));
 app.use("/cart", require("./routes/CartRoutes"));
 app.use("/admin", require("./routes/AdminRoutes"));
+app.use("/test", require("./routes/TestRoute"));
 
 app.get("/", async (req, res) => {
-    const customers = await Customer.findAll();
-    res.json(customers);
-
+  const customers = await Customer.findAll();
+  res.json(customers);
 });
 
-sequelize.sync({ alter: true })
-    .then(() => console.log("Database synced"))
-    .catch((error) => console.error("Error syncing database:", error));
+sequelize
+  .sync({ alter: true })
+  .then(() => console.log("Database synced"))
+  .catch((error) => console.error("Error syncing database:", error));
 
 app.listen(port, () => {
-  console.log(`server listening at http://localhost:${port}`);
+  console.log(`server listening at port ${port}`);
 });

@@ -1,6 +1,7 @@
-const Cart = require("../models/Cart");
+const { Cart, CartItem } = require("../models/Cart");
 const response = require("../utils/response");
 const Product = require("../models/Product");
+const Customer = require("../models/Customer");
 const { sequelize } = require("../config/db");
 const { getTotalPrice, cartResponseFormat } = require("../utils/utility");
 
@@ -8,7 +9,7 @@ const addToCart = async (req, res) => {
   try {
     const { customerId, productId, quantity } = req.body;
 
-    const product = await Product.findByPk(productId);
+    let product = await Product.findByPk(productId);
     if (!product) {
       response.notFound(res, "Product not found");
     }
@@ -18,16 +19,24 @@ const addToCart = async (req, res) => {
     }
 
     // Check if the cart item already exists
-    const existingCartItem = await Cart.findOne({
+    const existingCart = await Cart.findOne({
       where: {
         customerId,
-        productId,
       },
     });
 
-    if (existingCartItem) {
-      // const product = await Product.findByPk(productId);
+    if (existingCart) {
+      product = await Product.findByPk(productId);
+      const existingCartItem = await CartItem.findOne({
+        where: {
+          cartId: existingCart.id,
+          productId: productId,
+        },
+      });
+
       // Update the existing cart item
+      // I STOPED HERE 
+      // 
       if (existingCartItem.quantity + quantity > product.stockQuantity) {
         return response.badRequest(res, "Not enough stock available");
       }
@@ -50,6 +59,13 @@ const addToCart = async (req, res) => {
       );
     }
 
+
+    const cart = await Cart.create({ customer: customerId });
+    const newCartItems = await CartItem.findAll();
+
+    console.log(cart.toJSON());
+    console.log(newCartItems.toJSON());
+    return response.success(res, [cart.toJSON(), newCartItems.map(item => item.toJSON())], "Cart created successfully");
     // If the item is not in the cart, create a new cart item
     const newCartItem = await Cart.create({
       productId,
@@ -77,20 +93,29 @@ const addToCart = async (req, res) => {
 
 const getCartItems = async (req, res) => {
   try {
-    console.log("req.user", req.customer);
-    const cartItems = await Cart.findAll({
+    
+    const cart = await Cart.findOne({
       where: { customerId: req.customer.id || req.query.c },
+      include: [{ model: Customer,  attributes: ["fullName", "email", "phone", "balance"] }],
+      attributes: { exclude: ["createdAt", "updatedAt"] },
+    });
+
+    if (!cart) {
+      return response.success(res, [], "Your cart is empty");
+    }
+
+    const cartItems = await CartItem.findAll({
+      where: { cartId: cart.id },
       include: [{ model: Product, attributes: ["name", "price"] }],
       attributes: { exclude: ["createdAt", "updatedAt"] },
     });
 
-    if (cartItems.length == 0) {
-      return response.success(res, [], "Cart is empty");
-    }
+    console.log(cartItems)
 
     response.success(
       res,
-      cartResponseFormat(cartItems),
+      cartResponseFormat(cart.Customer, cartItems), // Pass the customer object to the response format
+      // cartResponseFormat(cartItems),
       "Cart items retrieved successfully"
     );
   } catch (error) {
