@@ -23,10 +23,17 @@ app.get("/", async (req, res) => {
 });
 
 sequelize
-  .sync({ alter: true })
+  .sync({ alter: true, logging: false })
   .then(() => console.log("Database synced"))
   .catch((error) => console.error("Error syncing database:", error));
 
-app.listen(port, () => {
+
+  const name = "$67"
+
+  name.replace("$", "aha")
+  console.log(1+parseInt(name.replace("$", "")))
+
+
+  app.listen(port, () => {
   console.log(`server listening at port ${port}`);
 });

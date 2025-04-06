@@ -1,8 +1,8 @@
 const success = (res, data, message) => {
   res.status(200).json({
     status: "success",
-    data,
     message: message || "Success",
+    data,
   });
 };
 const created = (res, data, message) => {
