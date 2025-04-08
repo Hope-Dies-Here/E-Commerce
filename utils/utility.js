@@ -11,14 +11,7 @@ const getTotalPrice = (items) => {
 
 const cartResponseFormat = (items) => {
   return {
-    // customer: {
-    //   id: customer.id,
-    //   fullName: customer.fullName,
-    //   email: customer.email,
-    //   phone: customer.phone,
-    //   balance: customer.balance,
-    // },
-    items: items.map((item) => ({
+   items: items.map((item) => ({
       product: item.product,
       quantity: item.quantity,
       price: item.product.price,
