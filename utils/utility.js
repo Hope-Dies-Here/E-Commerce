@@ -4,57 +4,32 @@ const Product = require("../models/Product");
 
 const getTotalPrice = (items) => {
   return items.reduce(
-    (total, item) => total + item.quantity * item.Product.price,
+    (total, item) => total + item.quantity * item.price,
     0
   );
 };
 
-const fetchCartItems = async (cartId) => {
-  const cartItems = await CartItem.findAll({
-    where: { cartId },
-    include: [
-      {
-        model: Product,
-        attributes: ["name", "price"],
-      },
-      {
-        model: Cart,
-        attributes: ["customerId", "id"],
-        include: [
-          {
-            model: Customer,
-            attributes: ["fullName", "email", "phone", "balance"]
-          }
-        ]
-      },
-    ],
-  });
-  return cartItems;
-};
-
-const cartResponseFormat = (customerId, cartItems, extra) => {
+const cartResponseFormat = (items) => {
   return {
-    customer: {
-      id: customerId.id,
-      fullName: customerId.fullName,
-      email: customerId.email,
-      phone: customerId.phone,
-      balance: customerId.balance || 0.0,
-    },
-    cartItems: cartItems.map((item) => ({
-      id: item.id,
-      name: item.Product.name,
+    // customer: {
+    //   id: customer.id,
+    //   fullName: customer.fullName,
+    //   email: customer.email,
+    //   phone: customer.phone,
+    //   balance: customer.balance,
+    // },
+    items: items.map((item) => ({
+      product: item.product,
       quantity: item.quantity,
-      price: item.Product.price,
-      cost: `$${(item.quantity * item.Product.price).toFixed(2)}`, // Calculate cost for each item
+      price: item.product.price,
+      cost: `$${(item.quantity * item.price).toFixed(2)}`, // Calculate cost for each item
       cartId: item.cartId,
     })) || [],
-    totalPrice: `$${getTotalPrice(cartItems).toFixed(2)}` || `$${0.0}`,
+    totalCost: `$${getTotalPrice(items).toFixed(2)}` || `$${0.0}`,
   };
 };
 
 module.exports = {
   getTotalPrice,
-  fetchCartItems,
   cartResponseFormat,
 };
