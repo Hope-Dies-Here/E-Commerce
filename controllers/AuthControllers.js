@@ -1,32 +1,37 @@
-const Customer = require("../models/Customer");
-const Admin = require("../models/Admin");
+const supabase = require("../config/database");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const response = require("../utils/response");
-const { registerUsers, loginUsers } = require("../utils/auth");
 
 const register = async (req, res) => {
   try {
-    // const newCustomer = await registerUsers(req.body, Customer);
-
     const { fullName, email, password, phone } = req.body;
 
-    // Check if the email already exists
-    const existingCustomer = await Customer.findOne({ where: { email } });
-    if (existingCustomer) {
-      response.badRequest(res, "Email already exists");
+    const { data: existingCustomer, error: findError } = await supabase
+      .from("customers")
+      .select("*")
+      .eq("email", email)
+      .single();
+
+    if (findError && findError.code !== "PGRST116") {
+      return response.error(res, "Error checking existing customer");
     }
 
-    // Hash the password
+    if (existingCustomer) {
+      return response.badRequest(res, "Email already exists");
+    }
+
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    // Create a new customer
-    const newCustomer = await Customer.create({
-      fullName,
-      email,
-      password: hashedPassword,
-      phone,
-    });
+    const { data: newCustomer, error: createError } = await supabase
+      .from("customers")
+      .insert([{ fullName, email, password: hashedPassword, phone }])
+      .single();
+
+    if (createError) {
+      return response.error(res, "Error creating customer");
+    }
+
     response.created(res, newCustomer);
   } catch (error) {
     console.error("Error registering customer:", error);
@@ -36,19 +41,25 @@ const register = async (req, res) => {
 
 const login = async (req, res) => {
   try {
-    // const user = await loginUsers(req.body, Customer, "customer");
-
     const { email, password } = req.body;
-    const customer = await Customer.findOne({ where: { email } });
 
-    if (!customer) {
-      response.notFound(res, "Email Not Found");
+    const { data: customer, error: findError } = await supabase
+      .from("customers")
+      .select("*")
+      .eq("email", email)
+      .single();
+
+    if (findError) {
+      return response.error(res, "Error fetching customer");
     }
 
-    // Compare the password
+    if (!customer) {
+      return response.notFound(res, "Email Not Found");
+    }
+
     const match = await bcrypt.compare(password, customer.password);
     if (!match) {
-      response.badRequest(res, "Invalid password");
+      return response.badRequest(res, "Invalid password");
     }
 
     const token = jwt.sign({ id: customer.id }, process.env.JWT_SECRET_KEY, {
@@ -66,80 +77,85 @@ const login = async (req, res) => {
     response.success(res, customerData);
   } catch (error) {
     console.error("Error logging in:", error);
-    response.error(res, error.message, error.status);
+    response.error(res, error.message);
   }
 };
 
 const adminRegister = async (req, res) => {
   try {
-    // const newAdmin = await registerUsers(req.body, Admin);
-
     const { fullName, email, password, phone } = req.body;
 
-    // Check if the email already exists
-    const existingCustomer = await Admin.findOne({ where: { email } });
-    if (existingCustomer) {
-      response.badRequest(res, "Email already exists");
-      return;
+    const { data: existingAdmin, error: findError } = await supabase
+      .from("admins")
+      .select("*")
+      .eq("email", email)
+      .single();
+
+    if (findError && findError.code !== "PGRST116") {
+      return response.error(res, "Error checking existing admin");
     }
 
-    // Hash the password
+    if (existingAdmin) {
+      return response.badRequest(res, "Email already exists");
+    }
+
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    // Create a new customer
-    const newAdmin = await User.create({
-      fullName,
-      email,
-      password: hashedPassword,
-      phone,
-    });
+    const { data: newAdmin, error: createError } = await supabase
+      .from("admins")
+      .insert([{ fullName, email, password: hashedPassword, phone }])
+      .single();
+
+    if (createError) {
+      return response.error(res, "Error creating admin");
+    }
 
     response.created(res, newAdmin);
   } catch (error) {
-    console.log("Error registering admin:", error);
-    return response.badRequest(res, "Email already exists");
+    console.error("Error registering admin:", error);
+    response.error(res, error.message);
   }
 };
 
 const adminLogin = async (req, res) => {
   try {
-    // const admin = await loginUsers(req.body, Admin, "admin");
-
     const { email, password } = req.body;
-    const customer = await Admin.findOne({ where: { email } });
 
-    if (!customer) {
-      response.notFound(res, "Email Not Found");
-      return;
+    const { data: admin, error: findError } = await supabase
+      .from("admins")
+      .select("*")
+      .eq("email", email)
+      .single();
+
+    if (findError) {
+      return response.error(res, "Error fetching admin");
     }
 
-    // Compare the password
-    const match = await bcrypt.compare(password, customer.password);
+    if (!admin) {
+      return response.notFound(res, "Email Not Found");
+    }
+
+    const match = await bcrypt.compare(password, admin.password);
     if (!match) {
-      response.badRequest(res, "Invalid password");
-      return;
+      return response.badRequest(res, "Invalid password");
     }
 
-    const token = jwt.sign(
-      { id: customer.id },
-      process.env.ADMIN_JWT_SECRET_KEY,
-      {
-        expiresIn: "696969m",
-      }
-    );
+    const token = jwt.sign({ id: admin.id }, process.env.ADMIN_JWT_SECRET_KEY, {
+      expiresIn: "696969m",
+    });
 
     const adminData = {
-      id: customer.id,
-      fullName: customer.fullName,
-      email: customer.email,
-      phone: customer.phone,
+      id: admin.id,
+      fullName: admin.fullName,
+      email: admin.email,
+      phone: admin.phone,
       token,
     };
 
     response.success(res, adminData);
   } catch (error) {
     console.error("Error logging in:", error);
-    response.error(res, error.message, error.status);
+    response.error(res, error.message);
   }
 };
 

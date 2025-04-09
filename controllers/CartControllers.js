@@ -1,23 +1,23 @@
-const { Cart, CartItem } = require("../models/Cart");
 const response = require("../utils/response");
-const Product = require("../models/Product");
-const Customer = require("../models/Customer");
-const { sequelize } = require("../config/db");
-const {
-  getTotalPrice,
-  cartResponseFormat,
-} = require("../utils/utility");
+const { getTotalPrice, cartResponseFormat } = require("../utils/utility");
+const supabase = require("../config/database");
 
 const addToCart = async (req, res) => {
   try {
     const { customerId, productId, quantity } = req.body;
 
-    const product = await Product.findByPk(productId, {
-      attributes: { exclude: ["password"] },
-    });
+    const { data: product, error: findProductError } = await supabase
+      .from("products")
+      .select("*")
+      .eq("id", productId)
+      .single();
+    
+      if (error && error.code !== "PGRST116") {
+      return response.error(res, "Error fetching product");
+    }
 
-    if(!product) {
-      response.notFound(res, "Product not found")
+    if (!product) {
+      response.notFound(res, "Product not found");
     }
 
     let cart = (() => {
@@ -44,11 +44,7 @@ const addToCart = async (req, res) => {
       existingCartItem.quantity = existingCartItem.quantity + quantity || 1;
       res.cookie("cart", JSON.stringify(cart));
 
-      return response.created(
-        res,
-        cartResponseFormat(cart),
-        "Cart Updated"
-      );
+      return response.created(res, cartResponseFormat(cart), "Cart Updated");
     }
 
     const newItem = {
@@ -60,24 +56,19 @@ const addToCart = async (req, res) => {
 
     cart.push(newItem);
     res.cookie("cart", JSON.stringify(cart));
-    response.created(
-      res,
-      cartResponseFormat(cart),
-      "Item added to cart"
-    );
+    response.created(res, cartResponseFormat(cart), "Item added to cart");
   } catch (error) {
-    console.log(error)
-    response.error(res, error.message)
+    console.log(error);
+    response.error(res, error.message);
   }
 };
 
 const saveCart = async (req, res) => {
-  // 
-}
+  //
+};
 
 const getCartItems = async (req, res) => {
   try {
-    
     let cart = (() => {
       try {
         return JSON.parse(req.cookies.cart);
@@ -88,16 +79,19 @@ const getCartItems = async (req, res) => {
 
     if (cart == []) return response.success(res, [], "Cart is empty");
 
-    response.success(res, cartResponseFormat(cart), "Cart retrived succesfully");
+    response.success(
+      res,
+      cartResponseFormat(cart),
+      "Cart retrived succesfully"
+    );
   } catch (error) {
-    console.log(error)
-    response.error(res, error.message)
+    console.log(error);
+    response.error(res, error.message);
   }
 };
 
 const removeFromCart = async (req, res) => {
   try {
-
     const id = parseInt(req.params.id);
     let cart = (() => {
       try {
@@ -105,28 +99,23 @@ const removeFromCart = async (req, res) => {
       } catch (error) {
         return [];
       }
-    })()
+    })();
 
     if (!id) {
       response.badRequest(res, "product id not provided");
     }
 
-    
-    const targetItem = cart.find(item => item.product.id == id) 
-    const updated = cart.filter(item => item.product.id !== id) 
-    console.log(updated)
+    const targetItem = cart.find((item) => item.product.id == id);
+    const updated = cart.filter((item) => item.product.id !== id);
+    console.log(updated);
 
     if (!targetItem) {
       return response.notFound(res, "Item not found");
     }
 
-    res.cookie("cart", JSON.stringify(updated))
-      return response.success(
-        res,
-        cartResponseFormat(updated),
-        "Removed"
-      );
-    } catch (error) {
+    res.cookie("cart", JSON.stringify(updated));
+    return response.success(res, cartResponseFormat(updated), "Removed");
+  } catch (error) {
     console.error("Error deleting cart item:", error);
     response.error(res, error.message);
   }
@@ -144,14 +133,13 @@ const clearCart = async (req, res) => {
 
 const checkout = async (req, res) => {
   try {
-    
     let cart = (() => {
       try {
         return JSON.parse(req.cookies.cart);
       } catch (error) {
         return [];
       }
-    })()
+    })();
 
     if (cart.length == 0) {
       return response.badRequest(res, "Cart is empty");
@@ -159,9 +147,17 @@ const checkout = async (req, res) => {
 
     // Check if all items are in stock
     for (const item of cart) {
-      const product = await Product.findByPk(item.product.id);
+      const { data: product, error: findProductError } = await supabase
+        .from("products")
+        .select("*")
+        .eq("id", item.product.id)
+        .single();
+
       if (product.stockQuantity < item.quantity) {
-        return response.badRequest(res, `Not enough stock available for '${product.name}'`);
+        return response.badRequest(
+          res,
+          `Not enough stock available for '${product.name}'`
+        );
       }
     }
 
@@ -180,20 +176,21 @@ const checkout = async (req, res) => {
 
     // Deduct stock from products
     for (const item of cart) {
-      const product = await Product.findByPk(item.product.id);
+      const { data: product, error: findProductError } = await supabase
+        .from("products")
+        .select("*")
+        .eq("id", item.product.id)
+        .single();
+
       product.stockQuantity -= item.quantity;
       await product.save();
     }
 
-    const totalCost = getTotalPrice(cart)
-    console.log(cart)
-    res.cookie("cart", null)
+    const totalCost = getTotalPrice(cart);
+    console.log(cart);
+    res.cookie("cart", null);
 
-    response.success(
-      res,
-      [],
-      `Purchase successful, total cost: ${totalCost}`
-    );
+    response.success(res, [], `Purchase successful, total cost: ${totalCost}`);
   } catch (error) {
     console.error("Error deleting cart item:", error);
     response.error(res, error.message);
