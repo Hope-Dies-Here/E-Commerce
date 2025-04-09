@@ -57,11 +57,6 @@ This project is an e-commerce platform designed to provide a seamless shopping e
 
 ---
 
-## Testing
-Use the `.bru` HTTP test files located in the `e co/` directory to test API endpoints. These files can be executed using tools like [REST Client](https://marketplace.visualstudio.com/items?itemName=humao.rest-client).
-
----
-
 ## Contributing
 Contributions are welcome! Please follow these steps:
 1. Fork the repository.
