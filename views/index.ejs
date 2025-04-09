@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Document</title>
+  <%# <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script> %>
+  <link href="/css/output.css" rel="stylesheet" />
+  <style>
+    body {
+
+      padding-bottom: 111111111111px;
+      margin: 0;
+    }
+
+    nav {
+      /* background-image: url("/img/Pasted\ image\ \(2\).png") !important; */
+      /* background-color: #584d09; */
+      /* opacity: .8; */
+    }
+
+    .get-your-cart-here {
+      opacity: 0.7;
+    }
+
+    main {
+      /* background-color: black !important; */
+      /* background-blend-mode: screen!important; */
+      /* background-repeat: no-repeat; */
+      /* background-size: cover; */
+    }
+
+    #nav-btn-buy {
+      /* width: 178px !important; */
+    }
+
+    #nav-btn-sell {
+      width: 64px !important;
+      height: 64px !important;
+    }
+
+    .nav-btn {
+      cursor: pointer;
+      transition: 0.8s;
+    }
+
+    .nav-btn:hover {
+      /* text-decoration: underline !important; */
+      text-transform: uppercase !important;
+    }
+
+    #page-title {
+      font-size: 2rem;
+    }
+
+    .items,
+    .carted-items {
+      background-color: white;
+    }
+
+    .add-to-cart-btn {
+      cursor: pointer;
+      /* background-color: #ff5722 !important;
+        background-color: #dc143c !important; */
+      transition: 0.8 !important;
+    }
+
+    .add-to-cart-btn:hover {
+      /* transition: 0.8;
+        box-shadow: 0 0 20px 4px rgba(220, 20, 60, 0.25) !important;
+        border-color: #ff4c65 !important; */
+    }
+
+    .w-25 {
+      height: 150px !important;
+      object-fit: cover !important;
+      border-radius: 10px !important;
+    }
+
+    .w-75 {
+      /* width: 350px !important; */
+    }
+
+    .blended-bg {
+      height: 100vh;
+      /* overflow-y: scroll; */
+      background-image: url("/img/woman-min.jpg"),
+        linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5));
+      background-size: cover;
+      background-position: center;
+      background-repeat: repeat;
+      background-blend-mode: overlay;
+      /* Try: multiply, screen, darken, lighten, etc. */
+      /* color: white; */
+      /* display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 2rem;
+*/
+    }
+
+    .rick>img {
+      box-shadow: 3 3 18px 8px rgba(44, 42, 42, .6) !important;
+
+    }
+  </style>
+
+  <%# <link href="/css/output.css" rel="stylesheet" /> %>
+  
+</head>
+
+<body class="bg-green-50">
+  <div class="blended-bg">
+
+
+    <nav class="mb-0 py-4 flex flex-wrap justify-between items-center px-4 sm:px-8 bg-gray-50 border-b border-gray-200 shadow-sm">
+      <div class="flex items-center gap-2 mb-2 sm:mb-0">
+        <img src="/img/logo.jpg" class="w-12 sm:w-16 rounded-full" />
+        <img src="/img/random.png" class="h-6 sm:h-8 w-[150px] lg:w-[178px] md:w-35  object-cover rounded-full" />
+      </div>
+
+      <div class="rick mb-2 sm:mb-0">
+        <img class="w-12 sm:w-20 h-12 sm:h-15 lg:w-65 lg:h-15 md:w-45 object-cover rounded-full" src="/img/user.jpg" />
+      </div>
+
+      <div class="flex flex-wrap items-center justify-center gap-3 sm:gap-4 w-full sm:w-auto">
+        <button id="nav-btn-buy" class="nav-btn btn bg-black lg:w-[178px] md:w-[140px] w-[178px] h-6 rounded-full text-lg sm:text-md lg:h-8 font-bold text-white shadow-md">
+          Buy
+        </button>
+        <button id="nav-btn-sell" class="nav-btn text-sm btn bg-yellow-500 text-indigo-800 flex justify-center items-center rounded-full font-bold shadow-md w-[64px] h-[64px]">
+          Sell
+        </button>
+      </div>
+    </nav>
+
+  </div>
+
+  <main class="bg-gray-100 shadow-lg">
+    <div class="border-y border-gray-300 h-16 flex items-center bg-white get-your-cart-here">
+      <marquee behavior="" direction="" class="font-bold text-lg">
+        <div class="flex items-center gap-4">
+          <code class="text-gray-900"> Pick your cart here </code>
+          <img src="/img/cart.png" class="w-10" />
+          <img src="/img/cart.png" class="w-10" />
+          <img src="/img/cart.png" class="w-10" />
+          <img src="/img/cart.png" class="w-10" />
+          <img src="/img/cart.png" class="w-10" />
+          <img src="/img/cart.png" class="w-10" />
+          <img src="/img/cart.png" class="w-10" />
+          <img src="/img/cart.png" class="w-10" />
+          <img src="/img/cart.png" class="w-10" />
+          <img src="/img/cart.png" class="w-10 ml-50" />
+          <code class="text-gray-900">
+            <i></i>
+          </code>
+        </div>
+      </marquee>
+    </div>
+    </div>
+    <div class="mt-4 flex flex-wrap justify-center gap-8 p-4" id="items-container">
+
+      <%  data.forEach(data => { %>
+        <!-- single item -->
+
+
+
+      <div data-price="<%=data.price%>" data-name="<%=data.title%>" data-id="<%=data.id%>" data-image="<%=data.images[0]%>" class="items w-90 flex flex-nowrap gap-4 items-center shadow-xs p-4 rounded rounded-md border border-gray-200">
+        <img src="<%=data.images[0]%>" alt="Product Image" class="w-35 h-45 object-cover rounded " />
+        <div class="flex flex-col justify-between">
+          <h2 class="text-lg mb-0 product-name" data-name="<%=data.title%>"><%=data.title%></h2>
+          <ul class="text-gray-900 text-sm mb-2">
+            <li>Price: $<%=data.price%></li>
+            <li class="flex items-center gap-2"><img src="<%=data.category.image%>" class="w-5 h-5 rounded-full" /> <%=data.category.name%> </li>
+          </ul>
+          <div class="flex items-center gap-2 justify-between mt-4">
+            <button class="text-sm bg-green-100 flex items-center justify-center gap-1 btn border border-gray-200 hover:bg-gray-100 hover:border-gray-300 transition-all w-full h-10 rounded font-bold add-to-cart-btn">
+              <img src="/img/paynow1.png" class="w-7" />
+              Buy
+            </button>
+
+            <button class="text-sm flex grid items-center justify-center btn border border-gray-200 hover:bg-gray-100 hover:border-gray-300 transition-all w-18 h-10 rounded font-bold add-to-cart-btn">
+              <img src="/img/add-to-cart.png" class="w-7" />
+              <!-- Buy -->
+            </button>
+          </div>
+        </div>
+      </div>
+      <% }) %>
+
+    </div>
+  </main>
+
+  <div id="cart" class="font-bold fixed bottom-4 right-4 cursor-pointer hover:p-1 rounded-lg transition-all">
+    <div class="p-5 relative">
+      <p class="absolute top-0 left-0 text-center pt-1 w-8 h-8 rounded-full bg-red-500 text-white hidden" id="cart-count" data-count="0"></p>
+      <img src="/img/cart.png" class="w-15" id="cartIcon" />
+    </div>
+  </div>
+
+  <div id="overlay" class="fixed top-0 left-0 h-full w-full bg-black opacity-50 hidden cursor-pointer"></div>
+
+  <div id="modal" class="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 
+           w-[90%] sm:w-4/5 md:w-3/5 lg:w-2/3 max-h-[90vh] lg:overflow-y-clip overflow-y-auto 
+           bg-white rounded-lg shadow-lg lg:p-6 md:p-6 sm:p-4 hidden z-50">
+    <div class="modal-content p-4 rounded-md bg-white shadow-md">
+      <h2 class="text-lg font-bold mb-4">Some Bar Code</h2>
+      <div class="grid grid-cols-2 gap-4">
+        <div class="bg-white barcode">
+          <img class="border h-10 w-full object-cover" src="/img/brcode.png" />
+        </div>
+        <div class="flex flex-col h-10 bg-gray-900"></div>
+      </div>
+    </div>
+
+    <main>
+      <div class=" grid lg:grid-cols-3 md:grid-cols-1 items-center gap-8 p-4 sm:px-0">
+        <div class="cartItemsInModal lg:col-span-2">
+          <h1 class="text-3xlg font-bold mb-4">Carted Items</h1>
+          <div id="modal-carted-items" class="lg:h-96 md:h-fit overflow-y-auto carted-items flex flex-col gap-2 cursor-pointer shadow-xs p-4 rounded rounded-md border border-gray-200 pb-15">
+
+          </div>
+          <div class="font-bold flex justify-between items-center shadow-[0px_-2px_4px_rgba(0,0,0,0.09)] bg-gray-100 opacity-100 px-4 py-4 -translate-y-14 rounded border border-gray-200">
+            <button id="clear-cart" disabled="true" class="bg-red-300 text-white font-bold px-6 py-2 rounded shadow-sm"> Clear Cart</button>
+            <p>Total Cost: $189</p>
+          </div>
+        </div>
+
+        <div class="carted-items flex flex-col gap-4 items-center cursor-pointer shadow-xs p-4 rounded rounded-md border border-gray-200">
+          <div class="flex-1">
+            <h2 class="text-lg font-bold mb-0">Total Cost</h2>
+            <p class="text-gray-600 text-md font-bold mb-2 text-center" data-total="" id="total-price">
+              $90
+            </p>
+          </div>
+
+          <div class="grid items-center md:">
+            <button class="flex items-center btn border border-gray-200 hover:bg-gray-100 hover:border-gray-300 transition-all px-4 py-2 rounded font-bold add-to-cart-btn">
+              <img src="/img/paynow1.png" class="w-8 mr-2" />
+              Pay Now
+            </button>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <script>
+    // fetch('https://api.escuelajs.co/api/v1/products')
+    //   .then(response => response.json())
+    //   .then(data => console.log(data));
+    const items = document.querySelectorAll(".items");
+    const cart = document.getElementById("cart");
+    const overlay = document.getElementById("overlay");
+    const cartModal = document.getElementById("modal");
+    const addToCart = document.querySelectorAll(".add-to-cart-btn");
+    const modalCartedItems = document.getElementById("modal-carted-items");
+    let isVisible = false;
+    const cartArr = [];
+
+    const targetItem = cart.getBoundingClientRect();
+    console.log(targetItem);
+
+    gsap.fromTo(
+      ".nav", {
+        scale: 0,
+        opacity: 0
+      }, {
+        scale: 1,
+        opacity: 1,
+        duration: 0.5
+      }
+    );
+
+    // items.forEach(function (item, i) {
+    //   gsap.fromTo(
+    //     item,
+    //     { y: -900, opacity: 1 },
+    //     { y: 0, opacity: 1, duration: 1, delay: i * 0.15 }
+    //   );
+    // });
+
+    addToCart.forEach(function(btn, i) {
+      btn.addEventListener("click", function(e) {
+
+        const target = e.target.closest(".items");
+        const existingItem = cartArr.find((i) => i.id == target.dataset.id)
+        if (existingItem) {
+
+          cartArr[cartArr.indexOf(existingItem)].quantity++
+          console.log(cartArr)
+        } else {
+
+          cartArr.push({
+            id: target.dataset.id,
+            image: target.dataset.image,
+            name: target.dataset.name,
+            price: parseInt(target.dataset.price),
+            quantity: 1
+          });
+        }
+
+
+        const targetPosition = target.getBoundingClientRect();
+
+        const clone = target.cloneNode(true);
+        document.getElementById("items-container").appendChild(clone);
+        clone.style.position = "absolute";
+
+        const scrollTop =
+          window.pageYOffset || document.documentElement.scrollTop;
+        const scrollLeft =
+          window.pageXOffset || document.documentElement.scrollLeft;
+        clone.style.top = targetPosition.top + scrollTop + "px";
+        clone.style.left = targetPosition.left + scrollLeft + "px";
+
+        clone.style.zIndex = "1000";
+
+        const {
+          top,
+          right,
+          bottom,
+          left
+        } = target.getBoundingClientRect();
+        const cartData = cart.getBoundingClientRect();
+        gsap.set(clone, {
+          transformOrigin: "100% 100%",
+        });
+        gsap.fromTo(
+          clone, {
+            autoAlpha: 1
+          }, {
+            x: targetItem.right - right - cartData.width / 2,
+            y: targetItem.bottom - bottom - cartData.height / 2,
+            scale: 0,
+            opacity: 0.7,
+            duration: 1,
+            ease: "power2.inOut",
+            onUpdate: function() {
+              gsap.set(clone, {
+                borderRadius: "10%"
+              });
+            },
+            onComplete: function(result) {
+              clone.remove();
+              gsap.fromTo(
+                "#cartIcon", {
+                  x: 1,
+                  opacity: 1
+                }, {
+                  x: 15,
+                  opacity: 1,
+                  duration: 0.2,
+                  repeat: 1,
+                  yoyo: true,
+                  ease: "power1.inOut",
+                  onComplete: function() {
+                    document.querySelector("#cart-count").textContent =
+                      cartArr.length;
+                    document.querySelector("#cart-count").dataset.count =
+                      cartArr.length;
+                    if (cartArr.length > 0)
+                      document.querySelector("#cart-count").classList.remove("hidden")
+
+                  },
+                }
+              );
+            },
+          }
+        );
+      });
+    });
+
+    //   onclick for cart
+
+    cart.addEventListener("click", function() {
+      if (!isVisible) {
+        if(cartArr.length > 0) {
+          document.getElementById("clear-cart").setAttribute("disabled", false)
+        }
+        document.getElementById("modal-carted-items").innerHTML = ""
+        cartArr.forEach(item => {
+          const template = document.createElement("div")
+          template.innerHTML = `
+              <div
+                class="relative flex gap-4 items-center justify-start border-b border-gray-200 pb-1"
+              >
+                <img src="${item.image}" alt="Product Image" class="w-12 h-12 object-cover rounded-full" />
+                <p class="text-lg font-bold w-75 text-start">
+                  ${item.name}
+                </p>
+                <div class="flex justify-evenly items-center w-1/3">
+                  <div>$${item.price}</div>
+                  <div class="ml-4"> 
+                    <label> Unit </label>
+                    <input type="number" value="${item.quantity}" class="w-15 p-2 rounded border border-gray-200"/>  
+                  </div>
+                </div>
+                <div class="absolute right-0 top-0 text-sm w-5 h-5 flex items-center justify-center rounded-full bg-red-600 text-white font-bold"> x </div>
+              </div>
+            `
+
+          document.getElementById("modal-carted-items").append(template)
+
+        })
+
+        console.log(cartArr.reduce((t, i) => t + i.price, 0))
+        document.getElementById("total-price").innerText = `$${cartArr.reduce((t, i) => t + i.price * i.quantity, 0 )}`
+        gsap.set(cartModal, {
+          display: "block",
+          opacity: 0
+        });
+        gsap.set(overlay, {
+          display: "block",
+          opacity: 0
+        });
+
+        gsap.to(
+          cartModal,
+          // { autoAlpha: 0 },
+          {
+            autoAlpha: 1,
+            duration: 0.3,
+            ease: "power2.out",
+            onComplete: function() {},
+          }
+        );
+
+        gsap.fromTo(
+          overlay, {
+            autoAlpha: 0
+          }, {
+            autoAlpha: 0.5,
+            duration: 0.3,
+            ease: "power2.out"
+          }
+        );
+      }
+
+      isVisible = !isVisible;
+
+      // cartModal.classList.toggle("hidden");
+      // overlay.classList.toggle("hidden");
+      // gsap.to("#modal", {
+      //   opacity: cartModal.classList.contains("hidden")? 0 : 1,
+      //   duration: 0.5,
+      // });
+      // gsap.to("#cartIcon", {
+      //   opacity: cartModal.classList.contains("hidden")? 1 : 0,
+      //   duration: 0.5,
+      // });
+      // gsap.to("#nav", {
+      //   opacity: cartModal.classList.contains("hidden")? 1 : 0,
+      //   duration: 0.5,
+      // });
+      // gsap.to("#items-container", {
+      //   opacity: cartModal.classList.contains("hidden")? 1 : 0,
+      //   duration: 0.5,
+      // });
+    });
+
+    overlay.addEventListener("click", function(e) {
+      if (isVisible) {
+        // alert("beyen")
+        gsap.set(overlay, {
+          display: "hidden"
+        });
+        gsap.set(cartModal, {
+          display: "hidden"
+        });
+
+
+        gsap.to(cartModal, {
+          autoAlpha: 0,
+          duration: 0.3,
+          ease: "power2.in",
+          onComplete: function() {
+            gsap.set(cartModal, {
+              display: "none"
+            });
+          },
+        });
+        gsap.to(
+          overlay,
+
+          {
+            autoAlpha: 0,
+            duration: 0.3,
+            ease: "power2.in",
+            onComplete: function() {
+              gsap.set(overlay, {
+                display: "none"
+              });
+            },
+          }
+        );
+      }
+
+      clearCart.addEventlistener("click", function() {
+        console.log('cleared')
+        cartArr.length = []
+        document.querySelector("#modal-carted-items").innerHTML = ""
+
+      })
+
+      isVisible = !isVisible;
+    });
+  </script>
+</body>
+
+</html>
