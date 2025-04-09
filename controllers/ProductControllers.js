@@ -5,7 +5,8 @@ const getProducts = async (req, res) => {
   try {
     const { data: products, error } = await supabase
       .from("products")
-      .select("*");
+      .select("*")
+      .order('id', { ascending: true });
 
     if (error) {
       return response.error(res, "Error fetching products");
@@ -45,11 +46,11 @@ const createProduct = async (req, res) => {
 const updateProduct = async (req, res) => {
   try {
     const { id } = req.params;
-    const { name, price, description, stockQuantity } = req.body;
+    const { name, price, description, stockQuantity, image } = req.body;
 
     const { data, error } = await supabase
       .from("products")
-      .update({ name, price, description, stockQuantity })
+      .update({ name, price, description, stockQuantity, image })
       .eq("id", id);
 
     if (error) {
@@ -58,7 +59,8 @@ const updateProduct = async (req, res) => {
 
     const { data: updatedProduct, error: productError } = await supabase
       .from("products")
-      .select("*");
+      .select("*")
+      .eq("id", id);
 
     if (productError) {
       return response.error(res, "Error fetching updated product");

@@ -11,7 +11,7 @@ router.get("/", async (req, res) => {
     // const response = await fetch("http://localhost:3000/api/products");
     // const localData = await response.json();
     // console.log(localData);
-    const { data, error } = await supabase.from("products").select("*");
+    const { data, error } = await supabase.from("products").select("*").order('id', { ascending: true });
 
     if (error) {
       return response.error(res, "Error fetching product");
