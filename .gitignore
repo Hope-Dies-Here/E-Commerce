@@ -36,3 +36,8 @@ Thumbs.db
 e co/
 rest_nvim_result#Response
 test.http
+
+.gitignore
+tailwind.config.js
+postcss.config.js
+public/css/input.css

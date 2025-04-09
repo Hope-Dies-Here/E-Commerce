@@ -1,20 +1,27 @@
 # E-Commerce Project
 
 ## Overview
-This project is an e-commerce platform designed to provide a seamless shopping experience for users. It includes features such as product browsing, a shopping cart, and secure checkout.
+This project is an e-commerce platform designed to provide a seamless shopping experience for users. It includes features such as product browsing, a shopping cart, and secure checkout. The backend is powered by Node.js and Supabase, while the frontend uses EJS templates and TailwindCSS for styling.
+
+---
 
 ## Features
 - User authentication and authorization
 - Product catalog with search and filtering
 - Shopping cart functionality
 - Order management
-- Payment gateway integration
+- Admin panel for product management
+- Visual representation via EJS rendering
+
+---
 
 ## Tech Stack
 - **Backend**: Node.js, Express.js
-- **Frontend**: ወፍ
-- **Database**: Postgres
+- **Frontend**: EJS, TailwindCSS
+- **Database**: PostgreSQL (via Supabase)
 - **Authentication**: JSON Web Tokens (JWT)
+
+---
 
 ## Installation
 1. Clone the repository:
@@ -29,13 +36,31 @@ This project is an e-commerce platform designed to provide a seamless shopping e
    ```bash
    npm install
    ```
-
-## Usage
-1. Start the development server:
+4. Configure the `.env` file:
+   ```properties
+   SUPABASE_URL=your_supabase_url
+   SUPABASE_KEY=your_supabase_key
+   JWT_SECRET_KEY=your_jwt_secret
+   ADMIN_JWT_SECRET_KEY=your_admin_jwt_secret
+   ```
+5. Start the development server:
    ```bash
    npm start
    ```
-2. Open your browser and navigate to `http://localhost:3000`.
+
+---
+
+## Usage
+1. Open your browser and navigate to:
+   - `http://localhost:3000/api/...` for API endpoints.
+   - `http://localhost:3000/visual` for visual representation via EJS.
+
+---
+
+## Testing
+Use the `.bru` HTTP test files located in the `e co/` directory to test API endpoints. These files can be executed using tools like [REST Client](https://marketplace.visualstudio.com/items?itemName=humao.rest-client).
+
+---
 
 ## Contributing
 Contributions are welcome! Please follow these steps:
@@ -54,8 +79,9 @@ Contributions are welcome! Please follow these steps:
    ```
 5. Open a pull request.
 
+---
+
 ## Documentation
 For detailed documentation, refer to [DOC.md](DOC.md).
 
-## License
-This project is licensed under the MIT License. See the `LICENSE` file for details.
+---

@@ -1,7 +1,7 @@
 # E-Commerce Application Documentation
 
 ## Overview
-This is a Node.js-based e-commerce application that provides functionality for managing customers, products, carts, and admin operations. It uses PostgreSQL as the database and Sequelize as the ORM.
+This is a Node.js-based e-commerce application that provides functionality for managing customers, products, carts, and admin operations. It uses PostgreSQL as the database and Supabase for backend services. The frontend is built using EJS templates and styled with TailwindCSS.
 
 ---
 
@@ -23,7 +23,8 @@ e-commerce/
 ├── models/         # Sequelize models
 ├── routes/         # API routes
 ├── utils/          # Utility functions
-├── test/           # HTTP test files
+├── views/          # EJS templates for frontend
+├── public/         # Static assets (CSS, JS, images)
 ├── .env            # Environment variables
 ├── index.js        # Application entry point
 ```
@@ -45,11 +46,8 @@ e-commerce/
 
 3. Configure the `.env` file:
    ```properties
-   DB_USER=your_db_user
-   DB_HOST=your_host(localhost for local setup)
-   DB_NAME=your_db_name
-   DB_PASSWORD=your_db_password
-   DB_PORT=5432
+   SUPABASE_URL=your_supabase_url
+   SUPABASE_KEY=your_supabase_key
    JWT_SECRET_KEY=your_jwt_secret
    ADMIN_JWT_SECRET_KEY=your_admin_jwt_secret
    ```
@@ -85,23 +83,16 @@ e-commerce/
 - **POST** `/admin/register/super-secure-endpoint` - Register a new admin.
 - **POST** `/admin/login` - Login as an admin.
 
----
-
-## Testing
-Use the provided HTTP test file to test the API endpoints:
-```bash
-test/index.http
-```
+### Visual
+- **GET** `/visual` - Render the EJS file for visual representation.
 
 ---
 
 ## Dependencies
 - **Express**: Web framework.
-- **Sequelize**: ORM for PostgreSQL.
+- **Supabase**: Backend services.
 - **JWT**: Authentication.
 - **Bcrypt**: Password hashing.
+- **TailwindCSS**: Frontend styling.
 
 ---
-
-## License
-This project is licensed under the MIT License.

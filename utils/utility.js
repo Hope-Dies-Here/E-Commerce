@@ -1,7 +1,3 @@
-const { CartItem, Cart } = require("../models/Cart");
-const Customer = require("../models/Customer");
-const Product = require("../models/Product");
-
 const getTotalPrice = (items) => {
   return items.reduce(
     (total, item) => total + item.quantity * item.price,
