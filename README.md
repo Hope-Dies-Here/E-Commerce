@@ -26,7 +26,7 @@ This project is an e-commerce platform designed to provide a seamless shopping e
 ## Installation
 1. Clone the repository:
    ```bash
-   git clone <repository-url>
+   git clone https://github.com/hope-dies-here/e-commerce
    ```
 2. Navigate to the project directory:
    ```bash
