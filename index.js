@@ -1,39 +1,30 @@
 require("dotenv").config();
+const cors = require("cors");
+const path = require("path");
 const express = require("express");
-const { connection, sequelize } = require("./config/db");
-const Customer = require("./models/Customer");
+const cookieParser = require("cookie-parser")
 
 const app = express();
 const port = 3000;
 
-connection();
+// connection();
 
+app.set("view engine", "ejs");
+app.set("views", path.join(__dirname, "views"));
+
+app.use(cors());
+app.use(cookieParser())
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(express.static(path.join(__dirname, "public")));
+// for api use
+app.use("/api/customers", require("./routes/CustomerRoutes"));
+app.use("/api/products", require("./routes/ProductRoutes"));
+app.use("/api/cart", require("./routes/CartRoutes"));
+app.use("/api/admin", require("./routes/AdminRoutes"));
 
-app.use("/customers", require("./routes/CustomerRoutes"));
-app.use("/products", require("./routes/ProductRoutes"));
-app.use("/cart", require("./routes/CartRoutes"));
-app.use("/admin", require("./routes/AdminRoutes"));
-app.use("/test", require("./routes/TestRoute"));
+// app.use("/visual", require("./routes"));
 
-app.get("/", async (req, res) => {
-  const customers = await Customer.findAll();
-  res.json(customers);
-});
-
-sequelize
-  .sync({ alter: true, logging: false })
-  .then(() => console.log("Database synced"))
-  .catch((error) => console.error("Error syncing database:", error));
-
-
-  const name = "$67"
-
-  name.replace("$", "aha")
-  console.log(1+parseInt(name.replace("$", "")))
-
-
-  app.listen(port, () => {
+app.listen(port, () => {
   console.log(`server listening at port ${port}`);
 });
