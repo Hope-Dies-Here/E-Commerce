@@ -576,7 +576,7 @@
       document.querySelector("#pay").setAttribute("disabled", true)
 
       setTimeout(() => {
-        cart.length = 0
+        cartArr.length = 0
         document.getElementById("modal-carted-items").innerHTML = ""
         document.querySelector("#pay").removeAttribute("disabled", true)
         document.querySelector("#pay").innerText = "Pay Now"
