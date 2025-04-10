@@ -520,8 +520,9 @@
 
     function changeUnit(value, index) {
       console.log(index, value)
-      if (value > cartArr[index].quantity) {
+      if (value  >= parseInt(cartArr[index].stock)) {
         alert("You can't add more than the stock")
+        document.querySelector(`[data-id=${cartArr[index].id}] input`).value = cartArr[index].stock
         return
       }
 
