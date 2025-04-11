@@ -61,6 +61,9 @@ e-commerce/
 
 ## API Endpoints
 
+### Base URL
+- `http://wiwi-commerce.vercel.app/` - This is base url
+
 ### Customers
 - **POST** `/customers/register` - Register a new customer.
 - **POST** `/customers/login` - Login as a customer.
